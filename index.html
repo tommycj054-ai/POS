@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>POS V11</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>POS</h1>
+
+</header>
+
+
+
+<main>
+
+
+
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+
+<h2>Dashboard</h2>
+
+
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>Products</h3>
+
+<p id="productCount">
+0
+</p>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>Stock</h3>
+
+<p id="inventoryCount">
+0
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>Low Stock</h3>
+
+<p id="lowStock">
+0
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>Sold</h3>
+
+<p id="itemsSold">
+0
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="quick-buttons">
+
+
+<button onclick="showPage('addProduct')">
+
+➕ Add Product
+
+</button>
+
+
+
+<button onclick="showPage('checkout')">
+
+🛒 Sale
+
+</button>
+
+
+
+<button onclick="showPage('inventory')">
+
+📦 Inventory
+
+</button>
+
+
+
+
+<button onclick="showPage('scanner')">
+
+📷 Scan
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="dashboard-box">
+
+
+<h2>⚠️ Low Stock</h2>
+
+
+<div id="lowStockList"></div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="dashboard-box">
+
+
+<h2>⭐ Best Sellers</h2>
+
+
+<div id="bestSellers"></div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="dashboard-box">
+
+
+<h2>📦 Category Stock</h2>
+
+
+<div id="categoryStock"></div>
+
+
+</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- CHECKOUT -->
+
+
+<section id="checkout" class="page">
+
+
+<h2>Checkout</h2>
+
+
+
+<div id="categoryButtons"></div>
+
+
+
+
+<input
+
+id="search"
+
+placeholder="Search products"
+
+oninput="searchProducts()"
+
+>
+
+
+
+
+<div class="checkout-layout">
+
+
+
+
+
+<div id="products" class="product-grid"></div>
+
+
+
+
+
+
+
+<div class="cart">
+
+
+<h2>Cart</h2>
+
+
+<div id="cartItems"></div>
+
+
+
+<h2>
+
+$
+
+<span id="total">
+0
+</span>
+
+
+</h2>
+
+
+
+
+<button onclick="clearCart()">
+
+Clear
+
+</button>
+
+
+
+
+<button class="black" onclick="pay('Cash')">
+
+💵 Cash
+
+</button>
+
+
+
+
+
+<button class="black" onclick="pay('Card')">
+
+💳 Card
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ADD PRODUCT -->
+
+
+<section id="addProduct" class="page">
+
+
+<h2>Add Product</h2>
+
+
+
+
+
+<input
+
+id="productName"
+
+placeholder="Product Name"
+
+>
+
+
+
+
+
+<input
+
+id="productPrice"
+
+type="number"
+
+placeholder="Price"
+
+>
+
+
+
+
+
+<input
+
+id="productStock"
+
+type="number"
+
+placeholder="Stock"
+
+>
+
+
+
+
+
+<select id="productCategory">
+
+</select>
+
+
+
+
+
+<input
+
+id="productBarcode"
+
+placeholder="Barcode"
+
+>
+
+
+
+
+<button onclick="generateProductBarcode()">
+
+Generate Barcode
+
+</button>
+
+
+
+
+
+
+<input
+
+id="productImage"
+
+type="file"
+
+accept="image/*"
+
+>
+
+
+
+
+
+<button onclick="saveProduct()">
+
+Save Product
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- EDIT PRODUCT -->
+
+
+<section id="editProduct" class="page">
+
+
+<h2>Edit Product</h2>
+
+
+
+
+
+<input id="editName">
+
+
+
+<input id="editPrice" type="number">
+
+
+
+<input id="editStock" type="number">
+
+
+
+<select id="editCategory">
+
+</select>
+
+
+
+
+
+<button onclick="updateProduct()">
+
+Save Changes
+
+</button>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- INVENTORY -->
+
+
+<section id="inventory" class="page">
+
+
+<h2>Inventory</h2>
+
+
+
+<div id="inventoryList"></div>
+
+
+
+</section>
+
+
+
+
+
+<!-- BARCODE SCANNER -->
+
+
+<section id="scanner" class="page">
+
+
+<h2>📷 Barcode Scanner</h2>
+
+
+
+
+<select id="scanMode">
+
+
+<option value="checkout">
+
+Add To Cart
+
+</option>
+
+
+
+<option value="add">
+
+Add +1 Stock
+
+</option>
+
+
+
+<option value="remove">
+
+Remove -1 Stock
+
+</option>
+
+
+
+</select>
+
+
+
+
+
+
+<div id="cameraScanner">
+
+</div>
+
+
+
+
+<button onclick="startScanner()">
+
+Start Camera
+
+</button>
+
+
+
+
+<button onclick="stopScanner()">
+
+Stop Camera
+
+</button>
+
+
+
+
+
+<h3>
+
+Bluetooth Scanner
+
+</h3>
+
+
+
+
+<input
+
+id="barcodeInput"
+
+placeholder="Scan barcode here"
+
+onchange="barcodeEntered()"
+
+>
+
+
+
+
+<div id="scanResult"></div>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- BARCODE PRINTING -->
+
+
+<section id="barcodes" class="page">
+
+
+<h2>🖨 Barcode Labels</h2>
+
+
+
+
+
+<div class="barcode-controls">
+
+
+
+<label>
+
+Label Size
+
+</label>
+
+
+
+<select id="labelSize">
+
+
+<option value="small">
+
+2 x 1 inch
+
+</option>
+
+
+
+<option value="medium">
+
+2.625 x 1 inch
+
+</option>
+
+
+
+<option value="large">
+
+3.33 x 2 inch
+
+</option>
+
+
+
+<option value="full">
+
+Full Page
+
+</option>
+
+
+
+</select>
+
+
+
+
+
+
+<button onclick="selectAllBarcodes()">
+
+☑ Select All
+
+</button>
+
+
+
+
+<button onclick="clearBarcodeSelection()">
+
+Clear
+
+</button>
+
+
+
+
+
+
+<button onclick="printSelectedBarcodes()">
+
+🖨 Print Selected
+
+</button>
+
+
+
+
+
+
+<button onclick="printAllBarcodes()">
+
+🖨 Print All
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div id="barcodeList">
+
+</div>
+
+
+
+
+
+
+
+<div id="printArea">
+
+</div>
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- CATEGORIES -->
+
+
+<section id="categories" class="page">
+
+
+<h2>⚙️ Categories</h2>
+
+
+
+
+
+<input
+
+id="categoryName"
+
+placeholder="New Category"
+
+>
+
+
+
+
+
+<button onclick="addCategory()">
+
+Add Category
+
+</button>
+
+
+
+
+
+
+<div id="categoryList">
+
+</div>
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SALES -->
+
+
+<section id="sales" class="page">
+
+
+<h2>🧾 Sales History</h2>
+
+
+
+<div id="salesList">
+
+</div>
+
+
+
+
+<button onclick="clearSales()">
+
+Clear Sales
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- NAVIGATION -->
+
+
+<nav>
+
+
+
+<button onclick="showPage('dashboard')">
+
+⌂
+
+</button>
+
+
+
+
+<button onclick="showPage('checkout')">
+
+🛒
+
+</button>
+
+
+
+
+
+<button onclick="showPage('scanner')">
+
+📷
+
+</button>
+
+
+
+
+
+<button onclick="showPage('inventory')">
+
+📦
+
+</button>
+
+
+
+
+
+<button onclick="showPage('barcodes')">
+
+🖨
+
+</button>
+
+
+
+
+
+<button onclick="showPage('categories')">
+
+⚙️
+
+</button>
+
+
+
+
+
+<button onclick="showPage('sales')">
+
+🧾
+
+</button>
+
+
+
+
+</nav>
+
+
+
+
+
+
+
+
+
+
+<script src="app.js"></script>
+
+
+
+</body>
+
+
+</html>
