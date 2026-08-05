@@ -725,3 +725,20 @@ button {
 
 
 }
+button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+.page {
+    touch-action: manipulation;
+}
+main {
+    padding-bottom:120px;
+}
+
+
+nav {
+    z-index:9999;
+}

@@ -2592,3 +2592,4 @@ updateCart();
 
 
 };
+console.log("POS V12 Loaded");
