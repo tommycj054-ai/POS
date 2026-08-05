@@ -29,6 +29,7 @@ let editingID = null;
 
 
 let scannerRunning = false;
+let scanLocked = false;
 
 
 let selectedBarcodes = [];
@@ -2023,37 +2024,28 @@ result.innerHTML=
 
 function startScanner(){
 
-
 if(scannerRunning)
-
 return;
 
 
+scanLocked = false;
 
-scannerRunning=true;
+scannerRunning = true;
 
 
 
 Quagga.init({
 
-
 inputStream:{
-
 
 name:"Live",
 
-
 type:"LiveStream",
 
-
 target:
-document.querySelector(
-"#cameraScanner"
-),
-
+document.querySelector("#cameraScanner"),
 
 constraints:{
-
 
 facingMode:"environment",
 
@@ -2061,12 +2053,104 @@ width:640,
 
 height:480
 
+}
+
+},
+
+
+decoder:{
+
+readers:[
+
+"code_128_reader",
+
+"ean_reader",
+
+"ean_8_reader",
+
+"upc_reader",
+
+"code_39_reader"
+
+]
 
 }
 
 
-},
+},function(error){
 
+
+if(error){
+
+console.log(error);
+
+alert("Camera error");
+
+scannerRunning=false;
+
+return;
+
+}
+
+
+Quagga.start();
+
+
+});
+
+
+
+
+
+Quagga.onDetected(function(data){
+
+
+
+// Stop multiple scans
+
+if(scanLocked)
+return;
+
+
+
+scanLocked = true;
+
+
+
+let code =
+data.codeResult.code.trim();
+
+
+
+console.log(
+"Camera Scan:",
+code
+);
+
+
+
+processBarcodeScan(code);
+
+
+
+
+// Turn camera off after one scan
+
+setTimeout(()=>{
+
+
+stopScanner();
+
+
+},500);
+
+
+
+});
+
+
+
+}
 
 
 decoder:{
@@ -2180,6 +2264,10 @@ scannerRunning=false;
 
 
 }
+
+
+
+scanLocked=false;
 
 
 }
