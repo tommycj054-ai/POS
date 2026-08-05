@@ -1,34 +1,48 @@
+// ================================
+// POS V12 DATA
+// ================================
 
-// ================================
-// POS V11 DATA
-// ================================
 
 let products =
 JSON.parse(localStorage.getItem("products")) || [];
 
+
 let sales =
 JSON.parse(localStorage.getItem("sales")) || [];
+
 
 let categories =
 JSON.parse(localStorage.getItem("categories")) || [];
 
-let todos =
-JSON.parse(localStorage.getItem("todos")) || [];
 
 
 let cart = [];
 
+
 let currentCategory = "All";
+
 
 let editingID = null;
 
+
 let scannerRunning = false;
 
+
 let selectedBarcodes = [];
+
+
+let barcodeCopies = {};
+
+
 
 let lastScan = "";
 
 let lastScanTime = 0;
+
+
+
+
+
 
 
 // ================================
@@ -59,14 +73,8 @@ JSON.stringify(categories)
 );
 
 
-
-localStorage.setItem(
-"todos",
-JSON.stringify(todos)
-);
-
-
 }
+
 
 
 
@@ -95,9 +103,15 @@ p.classList.remove("active");
 
 
 
-document
-.getElementById(page)
-.classList.add("active");
+let selected =
+document.getElementById(page);
+
+
+
+if(selected)
+
+selected.classList.add("active");
+
 
 
 
@@ -117,7 +131,18 @@ displayCategoryButtons();
 
 displayProducts();
 
+
+setTimeout(()=>{
+
+document
+.getElementById("checkoutBarcodeInput")
+?.focus();
+
+},200);
+
+
 }
+
 
 
 
@@ -130,14 +155,11 @@ displayInventory();
 
 
 
-
 if(page==="barcodes"){
 
 displayBarcodeList();
 
 }
-
-
 
 
 
@@ -149,15 +171,11 @@ displayCategories();
 
 
 
-
-
 if(page==="sales"){
 
 displaySales();
 
 }
-
-
 
 
 
@@ -176,34 +194,33 @@ displaySales();
 // ================================
 
 
-
 function updateDashboard(){
 
 
-
-let count =
+let productCount =
 document.getElementById("productCount");
 
-if(count)
 
-count.innerText =
+if(productCount)
+
+productCount.innerText =
 products.length;
 
 
 
 
-
-let stock =
+let stockCount =
 document.getElementById("inventoryCount");
 
 
-if(stock)
 
-stock.innerText =
+if(stockCount)
+
+stockCount.innerText =
 
 products.reduce(
 
-(a,p)=>a+p.stock,
+(a,p)=>a+Number(p.stock),
 
 0
 
@@ -217,6 +234,7 @@ let low =
 document.getElementById("lowStock");
 
 
+
 if(low)
 
 low.innerText =
@@ -226,7 +244,6 @@ products.filter(
 p=>p.stock<=2
 
 ).length;
-
 
 
 
@@ -256,13 +273,9 @@ s.items.reduce(
 
 ),
 
-
 0
 
-
 );
-
-
 
 
 
@@ -271,7 +284,6 @@ displayLowStock();
 displayBestSellers();
 
 displayCategoryStock();
-
 
 
 }
@@ -296,6 +308,7 @@ let box =
 document.getElementById("lowStockList");
 
 
+
 if(!box)
 
 return;
@@ -315,7 +328,8 @@ products
 
 box.innerHTML += `
 
-<div class="sales-item">
+
+<div>
 
 ⚠️ ${p.name}
 
@@ -325,7 +339,9 @@ Stock: ${p.stock}
 
 </div>
 
+
 `;
+
 
 
 });
@@ -349,7 +365,6 @@ Stock: ${p.stock}
 function displayBestSellers(){
 
 
-
 let box =
 document.getElementById("bestSellers");
 
@@ -357,7 +372,6 @@ document.getElementById("bestSellers");
 if(!box)
 
 return;
-
 
 
 
@@ -372,19 +386,13 @@ s.items.forEach(i=>{
 
 
 sold[i.name] =
-
-(sold[i.name] || 0)
-
-+ i.qty;
-
+(sold[i.name] || 0)+i.qty;
 
 
 });
 
 
 });
-
-
 
 
 
@@ -398,31 +406,29 @@ Object.entries(sold)
 
 .slice(0,5)
 
-.forEach(item=>{
+.forEach(i=>{
 
 
 box.innerHTML += `
 
+<div>
 
-<div class="sales-item">
-
-⭐ ${item[0]}
+⭐ ${i[0]}
 
 <br>
 
-Sold: ${item[1]}
+Sold: ${i[1]}
 
 </div>
 
-
 `;
-
 
 
 });
 
 
 }
+
 
 
 
@@ -439,7 +445,6 @@ Sold: ${item[1]}
 function displayCategoryStock(){
 
 
-
 let box =
 document.getElementById("categoryStock");
 
@@ -450,7 +455,6 @@ return;
 
 
 
-
 box.innerHTML="";
 
 
@@ -458,7 +462,7 @@ box.innerHTML="";
 categories.forEach(c=>{
 
 
-let amount =
+let total =
 
 products
 
@@ -477,19 +481,18 @@ products
 box.innerHTML += `
 
 
-<div class="sales-item">
+<div>
 
 📦 ${c}
 
 <br>
 
-${amount} items
+${total} items
 
 </div>
 
 
 `;
-
 
 
 });
@@ -510,9 +513,7 @@ ${amount} items
 // ================================
 
 
-
 function addCategory(){
-
 
 
 let input =
@@ -521,7 +522,6 @@ document.getElementById("categoryName");
 
 let name =
 input.value.trim();
-
 
 
 
@@ -547,13 +547,13 @@ saveData();
 input.value="";
 
 
-
 displayCategories();
+
 
 updateCategoryDropdowns();
 
-displayCategoryButtons();
 
+displayCategoryButtons();
 
 
 }
@@ -609,9 +609,7 @@ Delete
 });
 
 
-
 }
-
 
 
 
@@ -645,32 +643,31 @@ categories.splice(index,1);
 saveData();
 
 
-
 displayCategories();
 
 updateCategoryDropdowns();
 
+
 }
 
 
-// ================================
-// CATEGORY DROPDOWNS
-// ================================
+
+
+
 
 function updateCategoryDropdowns(){
 
 
-let selects = [
+[
+"productCategory",
+"editCategory"
 
-document.getElementById("productCategory"),
-
-document.getElementById("editCategory")
-
-];
+].forEach(id=>{
 
 
+let select =
+document.getElementById(id);
 
-selects.forEach(select=>{
 
 
 if(!select)
@@ -704,15 +701,6 @@ ${c}
 
 
 }
-
-
-
-
-
-
-
-
-
 // ================================
 // CHECKOUT CATEGORIES
 // ================================
@@ -748,11 +736,13 @@ categories.forEach(c=>{
 
 box.innerHTML += `
 
+
 <button onclick="filterCategory('${c}')">
 
 ${c}
 
 </button>
+
 
 `;
 
@@ -761,6 +751,7 @@ ${c}
 
 
 }
+
 
 
 
@@ -786,12 +777,11 @@ displayProducts();
 
 
 // ================================
-// PRODUCT DISPLAY
+// DISPLAY PRODUCTS
 // ================================
 
 
 function displayProducts(){
-
 
 
 let box =
@@ -806,7 +796,6 @@ return;
 
 
 box.innerHTML="";
-
 
 
 
@@ -826,15 +815,17 @@ return p.category===currentCategory;
 })
 
 
-
 .forEach(p=>{
+
 
 
 box.innerHTML += `
 
 
 <div class="product"
+
 onclick="addToCart(${p.id})">
+
 
 
 ${p.image ?
@@ -849,6 +840,7 @@ ${p.image ?
 
 
 
+
 <h3>
 
 ${p.name}
@@ -859,7 +851,7 @@ ${p.name}
 
 <p>
 
-$${p.price}
+$${Number(p.price).toFixed(2)}
 
 </p>
 
@@ -883,98 +875,6 @@ Stock: ${p.stock}
 });
 
 
-
-}
-
-
-
-
-
-
-
-
-
-function searchProducts(){
-
-
-let search =
-
-document
-.getElementById("search")
-.value
-.toLowerCase();
-
-
-
-let box =
-document.getElementById("products");
-
-
-
-box.innerHTML="";
-
-
-
-products
-
-.filter(p=>
-
-p.name
-
-.toLowerCase()
-
-.includes(search)
-
-)
-
-
-
-.forEach(p=>{
-
-
-box.innerHTML += `
-
-
-<div class="product"
-onclick="addToCart(${p.id})">
-
-
-${p.image ?
-
-`<img src="${p.image}">`
-
-:
-
-"📦"
-
-}
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-<p>
-
-$${p.price}
-
-</p>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
 }
 
 
@@ -986,7 +886,7 @@ $${p.price}
 
 
 // ================================
-// BARCODE GENERATOR
+// ADD PRODUCT
 // ================================
 
 
@@ -1006,21 +906,13 @@ return Date.now()
 
 
 
+
 function generateProductBarcode(){
 
 
-let box =
-
 document.getElementById(
 "productBarcode"
-);
-
-
-
-box.value =
-
-generateBarcodeNumber();
-
+).value = generateBarcodeNumber();
 
 
 }
@@ -1029,13 +921,6 @@ generateBarcodeNumber();
 
 
 
-
-
-
-
-// ================================
-// ADD PRODUCT
-// ================================
 
 
 function saveProduct(){
@@ -1047,31 +932,29 @@ let product = {
 id:Date.now(),
 
 
-name:
 
-productName.value,
+name:
+document.getElementById("productName").value,
+
 
 
 price:
+Number(document.getElementById("productPrice").value),
 
-Number(productPrice.value),
 
 
 stock:
+Number(document.getElementById("productStock").value),
 
-Number(productStock.value),
 
 
 category:
-
-productCategory.value,
+document.getElementById("productCategory").value,
 
 
 
 barcode:
-
-productBarcode.value ||
-
+document.getElementById("productBarcode").value ||
 generateBarcodeNumber(),
 
 
@@ -1085,11 +968,8 @@ image:""
 
 
 
-
 let file =
-
-productImage.files[0];
-
+document.getElementById("productImage").files[0];
 
 
 
@@ -1098,42 +978,26 @@ productImage.files[0];
 if(file){
 
 
-
-let reader =
-
-new FileReader();
-
+let reader = new FileReader();
 
 
 
 reader.onload=function(e){
 
 
-
-product.image =
-
-e.target.result;
-
+product.image=e.target.result;
 
 
 products.push(product);
 
 
-
 saveData();
 
 
-
-displayInventory();
-
-
-
-showPage("inventory");
-
+finishAddProduct();
 
 
 };
-
 
 
 
@@ -1149,20 +1013,43 @@ else{
 products.push(product);
 
 
-
 saveData();
 
 
-
-displayInventory();
-
-
-
-showPage("inventory");
+finishAddProduct();
 
 
 }
 
+
+}
+
+
+
+
+
+
+
+function finishAddProduct(){
+
+
+document.getElementById("productName").value="";
+
+document.getElementById("productPrice").value="";
+
+document.getElementById("productStock").value="";
+
+document.getElementById("productBarcode").value="";
+
+
+displayInventory();
+
+displayProducts();
+
+updateDashboard();
+
+
+showPage("inventory");
 
 
 }
@@ -1184,12 +1071,13 @@ function editProduct(id){
 
 
 let p =
+products.find(x=>x.id===id);
 
-products.find(
 
-x=>x.id===id
 
-);
+if(!p)
+
+return;
 
 
 
@@ -1199,19 +1087,15 @@ editingID=id;
 
 editName.value=p.name;
 
-
 editPrice.value=p.price;
 
-
 editStock.value=p.stock;
-
 
 editCategory.value=p.category;
 
 
 
 showPage("editProduct");
-
 
 
 }
@@ -1221,42 +1105,36 @@ showPage("editProduct");
 
 
 
-
 function updateProduct(){
 
 
-
 let p =
+products.find(x=>x.id===editingID);
 
-products.find(
 
-x=>x.id===editingID
 
-);
+if(!p)
 
+return;
 
 
 
 p.name =
-
 editName.value;
 
 
 
 p.price =
-
 Number(editPrice.value);
 
 
 
 p.stock =
-
 Number(editStock.value);
 
 
 
 p.category =
-
 editCategory.value;
 
 
@@ -1264,13 +1142,12 @@ editCategory.value;
 saveData();
 
 
-
 displayInventory();
 
+displayProducts();
 
 
 showPage("inventory");
-
 
 
 }
@@ -1291,12 +1168,8 @@ showPage("inventory");
 function displayInventory(){
 
 
-
 let box =
-
-document.getElementById(
-"inventoryList"
-);
+document.getElementById("inventoryList");
 
 
 
@@ -1307,7 +1180,6 @@ return;
 
 
 box.innerHTML="";
-
 
 
 
@@ -1358,7 +1230,6 @@ ${p.stock}
 <br>
 
 
-
 Barcode:
 
 ${p.barcode}
@@ -1377,6 +1248,8 @@ ${p.barcode}
 </button>
 
 
+
+
 <button onclick="addStock(${p.id})">
 
 +1
@@ -1384,11 +1257,15 @@ ${p.barcode}
 </button>
 
 
+
+
 <button onclick="removeStock(${p.id})">
 
 -1
 
 </button>
+
+
 
 
 <button onclick="deleteProduct(${p.id})">
@@ -1399,19 +1276,17 @@ ${p.barcode}
 
 
 
-
 </div>
 
 
 `;
 
 
-
 });
 
 
-
 }
+
 
 
 
@@ -1422,35 +1297,25 @@ ${p.barcode}
 function addStock(id){
 
 
-
 let p =
-
-products.find(
-
-x=>x.id===id
-
-);
+products.find(x=>x.id===id);
 
 
+
+if(p){
 
 p.stock++;
 
-
-
 saveData();
-
-
 
 displayInventory();
 
-
-
 updateDashboard();
-
-
 
 }
 
+
+}
 
 
 
@@ -1459,58 +1324,45 @@ updateDashboard();
 function removeStock(id){
 
 
-
 let p =
-
-products.find(
-
-x=>x.id===id
-
-);
+products.find(x=>x.id===id);
 
 
 
+if(p && p.stock>0){
 
-if(p.stock>0)
 
 p.stock--;
-
 
 
 saveData();
 
 
-
 displayInventory();
-
 
 
 updateDashboard();
 
 
+}
+
 
 }
-// ================================
-// DELETE PRODUCT
-// ================================
+
+
+
+
+
+
 
 function deleteProduct(id){
 
 
-let product = products.find(
-p => p.id === id
-);
+products =
+products.filter(
 
+p=>p.id!==id
 
-
-if(!product)
-
-return;
-
-
-
-products = products.filter(
-p => p.id !== id
 );
 
 
@@ -1523,15 +1375,246 @@ displayInventory();
 
 displayProducts();
 
-displayBarcodeList();
-
 updateDashboard();
 
 
 }
 
+
+
+
+
+
+
+
+
 // ================================
-// FIND PRODUCT BY BARCODE
+// CART SYSTEM
+// ================================
+
+
+function addToCart(id){
+
+
+let product =
+products.find(p=>p.id===id);
+
+
+
+if(!product)
+
+return;
+
+
+
+if(product.stock<=0){
+
+
+alert("Out of stock");
+
+
+return;
+
+
+}
+
+
+
+let item =
+cart.find(i=>i.id===id);
+
+
+
+if(item){
+
+
+item.qty++;
+
+
+}
+
+else{
+
+
+cart.push({
+
+id:product.id,
+
+name:product.name,
+
+price:Number(product.price),
+
+qty:1
+
+
+});
+
+
+}
+
+
+
+updateCart();
+
+
+}
+
+
+
+
+
+
+function updateCart(){
+
+
+let box =
+document.getElementById("cartItems");
+
+
+
+if(!box)
+
+return;
+
+
+
+box.innerHTML="";
+
+
+
+let total=0;
+
+
+
+cart.forEach(item=>{
+
+
+total += item.price * item.qty;
+
+
+
+box.innerHTML += `
+
+
+<div class="cart-item">
+
+
+${item.name}
+
+
+<br>
+
+
+Qty: ${item.qty}
+
+
+
+<button onclick="removeCartItem(${item.id})">
+
+X
+
+</button>
+
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+
+document.getElementById("total").innerText =
+total.toFixed(2);
+
+
+}
+
+
+
+
+
+function removeCartItem(id){
+
+
+cart =
+cart.filter(i=>i.id!==id);
+
+
+
+updateCart();
+
+
+}
+
+
+
+
+
+
+function clearCart(){
+
+
+cart=[];
+
+
+updateCart();
+
+
+}
+// ================================
+// BLUETOOTH CHECKOUT SCANNER
+// ================================
+
+
+function checkoutBarcodeScan(){
+
+
+let input =
+document.getElementById("checkoutBarcodeInput");
+
+
+
+let code =
+input.value.trim();
+
+
+
+if(code){
+
+
+let product =
+findProductByBarcode(code);
+
+
+
+if(product){
+
+
+addToCart(product.id);
+
+
+}
+
+
+}
+
+
+
+input.value="";
+
+
+}
+
+
+
+
+
+// ================================
+// BARCODE LOOKUP
 // ================================
 
 
@@ -1540,7 +1623,7 @@ function findProductByBarcode(code){
 
 return products.find(
 
-p => p.barcode === code
+p=>p.barcode===code
 
 );
 
@@ -1556,24 +1639,19 @@ p => p.barcode === code
 
 
 // ================================
-// BLUETOOTH SCANNER
+// SCANNER PAGE BLUETOOTH
 // ================================
-// Most Bluetooth scanners act like a keyboard
 
 
 function barcodeEntered(){
 
 
 let input =
-
-document.getElementById(
-"barcodeInput"
-);
+document.getElementById("barcodeInput");
 
 
 
 let code =
-
 input.value.trim();
 
 
@@ -1584,7 +1662,6 @@ if(code){
 processBarcodeScan(code);
 
 
-
 }
 
 
@@ -1592,7 +1669,6 @@ processBarcodeScan(code);
 input.value="";
 
 
-
 }
 
 
@@ -1600,37 +1676,14 @@ input.value="";
 
 
 
-
-
-
-// ================================
-// PROCESS SCAN
-// ================================
 
 
 function processBarcodeScan(code){
 
 
-let now = Date.now();
 
-
-// Prevent duplicate scans
-if(
-    code === lastScan &&
-    now - lastScanTime < 1500
-){
-
-    return;
-
-}
-
-
-lastScan = code;
-lastScanTime = now;
-
-
-
-let product = findProductByBarcode(code);
+let product =
+findProductByBarcode(code);
 
 
 
@@ -1644,8 +1697,7 @@ if(!product){
 
 if(result)
 
-result.innerHTML =
-"❌ Barcode not found";
+result.innerHTML="❌ Barcode not found";
 
 
 return;
@@ -1664,19 +1716,16 @@ document.getElementById("scanMode").value;
 
 
 
-// ADD TO CART
-
 if(mode==="checkout"){
 
 
 addToCart(product.id);
 
 
-if(result)
 
 result.innerHTML = `
 
-✅ Added to Cart
+✅ Added
 
 <br>
 
@@ -1692,15 +1741,10 @@ ${product.name}
 
 
 
-
-
-
-// ADD EXACTLY 1 STOCK
-
 if(mode==="add"){
 
 
-product.stock = Number(product.stock) + 1;
+product.stock++;
 
 
 saveData();
@@ -1709,7 +1753,9 @@ saveData();
 displayInventory();
 
 
-if(result)
+updateDashboard();
+
+
 
 result.innerHTML = `
 
@@ -1733,21 +1779,12 @@ Stock: ${product.stock}
 
 
 
-
-
-// REMOVE EXACTLY 1 STOCK
-
 if(mode==="remove"){
 
 
+if(product.stock>0)
 
-if(product.stock > 0){
-
-
-product.stock = Number(product.stock) - 1;
-
-
-}
+product.stock--;
 
 
 
@@ -1757,8 +1794,9 @@ saveData();
 displayInventory();
 
 
+updateDashboard();
 
-if(result)
+
 
 result.innerHTML = `
 
@@ -1778,21 +1816,22 @@ Stock: ${product.stock}
 
 
 
-updateDashboard();
-
-
 }
 
 
 
 
+
+
+
+
+
 // ================================
-// IPAD CAMERA SCANNER
+// CAMERA SCANNER
 // ================================
 
 
 function startScanner(){
-
 
 
 if(scannerRunning)
@@ -1801,35 +1840,24 @@ return;
 
 
 
-
 scannerRunning=true;
-
-
 
 
 
 Quagga.init({
 
 
-
 inputStream:{
-
 
 
 name:"Live",
 
 
-
 type:"LiveStream",
 
 
-
 target:
-
-document.querySelector(
-"#cameraScanner"
-),
-
+document.querySelector("#cameraScanner"),
 
 
 constraints:{
@@ -1838,18 +1866,14 @@ constraints:{
 facingMode:"environment"
 
 
-
 }
-
 
 
 },
 
 
 
-
 decoder:{
-
 
 
 readers:[
@@ -1866,12 +1890,12 @@ readers:[
 
 ]
 
+
 }
 
 
 
 },function(error){
-
 
 
 if(error){
@@ -1880,9 +1904,7 @@ if(error){
 console.log(error);
 
 
-alert(
-"Camera could not start"
-);
+alert("Camera error");
 
 
 return;
@@ -1903,32 +1925,34 @@ Quagga.start();
 
 
 
-
-
 Quagga.onDetected(function(data){
+
+
 
 let code =
 data.codeResult.code;
 
 
+
 processBarcodeScan(code);
+
 
 
 setTimeout(()=>{
 
+
 stopScanner();
 
+
 },500);
+
 
 
 });
 
 
 
-
 }
-
-
 
 
 
@@ -1939,21 +1963,16 @@ stopScanner();
 function stopScanner(){
 
 
-
 if(scannerRunning){
-
 
 
 Quagga.stop();
 
 
-
 scannerRunning=false;
 
 
-
 }
-
 
 
 }
@@ -1967,264 +1986,7 @@ scannerRunning=false;
 
 
 // ================================
-// CART SYSTEM
-// ================================
-
-
-function addToCart(id){
-
-
-
-let product =
-
-products.find(
-
-p=>p.id===id
-
-);
-
-
-
-
-if(!product)
-
-return;
-
-
-
-
-
-if(product.stock<=0){
-
-
-alert(
-"Out of stock"
-);
-
-
-return;
-
-
-}
-
-
-
-
-
-let item =
-
-cart.find(
-
-i=>i.id===id
-
-);
-
-
-
-
-
-if(item){
-
-
-
-item.qty++;
-
-
-
-}
-
-else{
-
-
-
-cart.push({
-
-
-
-id:product.id,
-
-
-name:product.name,
-
-
-price:product.price,
-
-
-qty:1
-
-
-
-});
-
-
-
-}
-
-
-
-
-updateCart();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function updateCart(){
-
-
-
-let box =
-
-document.getElementById(
-"cartItems"
-);
-
-
-
-
-if(!box)
-
-return;
-
-
-
-
-box.innerHTML="";
-
-
-
-let total=0;
-
-
-
-
-cart.forEach(item=>{
-
-
-
-total +=
-
-item.price *
-
-item.qty;
-
-
-
-
-box.innerHTML += `
-
-
-<div class="cart-item">
-
-
-${item.name}
-
-
-<br>
-
-
-Qty:
-
-${item.qty}
-
-
-
-<button onclick="removeCartItem(${item.id})">
-
-X
-
-</button>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-
-
-document.getElementById(
-"total"
-).innerText =
-
-total.toFixed(2);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-function removeCartItem(id){
-
-
-
-cart =
-
-cart.filter(
-
-i=>i.id!==id
-
-);
-
-
-
-updateCart();
-
-
-
-}
-
-
-
-
-
-
-
-function clearCart(){
-
-
-
-cart=[];
-
-
-
-updateCart();
-
-
-
-}
-
-
-
-
-
-
-
-
-// ================================
-// CHECKOUT
+// CHECKOUT PAYMENT
 // ================================
 
 
@@ -2232,16 +1994,19 @@ function pay(type){
 
 
 
+if(cart.length===0)
+
+return;
+
+
+
+
 cart.forEach(item=>{
 
 
-
 let product =
-
 products.find(
-
 p=>p.id===item.id
-
 );
 
 
@@ -2249,19 +2014,13 @@ p=>p.id===item.id
 if(product){
 
 
-
-product.stock -=
-
-item.qty;
-
+product.stock -= item.qty;
 
 
 }
 
 
-
 });
-
 
 
 
@@ -2271,11 +2030,8 @@ item.qty;
 sales.push({
 
 
-
 date:
-
-new Date()
-.toLocaleString(),
+new Date().toLocaleString(),
 
 
 
@@ -2286,9 +2042,7 @@ payment:type,
 items:[...cart]
 
 
-
 });
-
 
 
 
@@ -2305,30 +2059,36 @@ cart=[];
 updateCart();
 
 
+displayProducts();
+
+
+displayInventory();
+
 
 updateDashboard();
 
 
-
-displayProducts();
-
-
-
 }
 
+
+
+
+
+
+
+
+
 // ================================
-// BARCODE PRINTING
+// BARCODE PRINTING V12
 // ================================
+
 
 
 function displayBarcodeList(){
 
 
 let box =
-
-document.getElementById(
-"barcodeList"
-);
+document.getElementById("barcodeList");
 
 
 
@@ -2338,14 +2098,18 @@ return;
 
 
 
-
 box.innerHTML="";
 
 
 
 
-
 products.forEach(p=>{
+
+
+if(!barcodeCopies[p.id])
+
+barcodeCopies[p.id]=1;
+
 
 
 
@@ -2357,7 +2121,6 @@ box.innerHTML += `
 
 <input 
 type="checkbox"
-id="check-${p.id}"
 onchange="toggleBarcode(${p.id})"
 >
 
@@ -2368,6 +2131,7 @@ onchange="toggleBarcode(${p.id})"
 ${p.name}
 
 </h3>
+
 
 
 
@@ -2383,8 +2147,29 @@ ${p.barcode}
 
 
 
-</div>
+<label>
 
+Copies
+
+</label>
+
+
+
+<input
+
+type="number"
+
+min="1"
+
+value="${barcodeCopies[p.id]}"
+
+onchange="setBarcodeCopies(${p.id},this.value)"
+
+>
+
+
+
+</div>
 
 
 `;
@@ -2398,9 +2183,7 @@ ${p.barcode}
 
 
 
-
 products.forEach(p=>{
-
 
 
 JsBarcode(
@@ -2424,7 +2207,6 @@ displayValue:true
 }
 
 
-
 );
 
 
@@ -2442,27 +2224,32 @@ displayValue:true
 
 
 
+function setBarcodeCopies(id,value){
+
+
+barcodeCopies[id]=Number(value);
+
+
+
+}
+
+
+
+
+
+
+
 
 function toggleBarcode(id){
 
 
-
-if(
-
-selectedBarcodes.includes(id)
-
-){
-
+if(selectedBarcodes.includes(id)){
 
 
 selectedBarcodes =
-
 selectedBarcodes.filter(
-
 x=>x!==id
-
 );
-
 
 
 }
@@ -2471,7 +2258,6 @@ else{
 
 
 selectedBarcodes.push(id);
-
 
 
 }
@@ -2490,23 +2276,15 @@ selectedBarcodes.push(id);
 function selectAllBarcodes(){
 
 
-
 selectedBarcodes =
-
-products.map(
-
-p=>p.id
-
-);
+products.map(p=>p.id);
 
 
 
 displayBarcodeList();
 
 
-
 }
-
 
 
 
@@ -2517,13 +2295,10 @@ displayBarcodeList();
 function clearBarcodeSelection(){
 
 
-
 selectedBarcodes=[];
 
 
-
 displayBarcodeList();
-
 
 
 }
@@ -2536,15 +2311,11 @@ displayBarcodeList();
 
 
 
-// PRINT SELECTED
-
-
 function printSelectedBarcodes(){
 
 
 
 let items =
-
 products.filter(
 
 p=>
@@ -2558,7 +2329,6 @@ selectedBarcodes.includes(p.id)
 printBarcodes(items);
 
 
-
 }
 
 
@@ -2566,9 +2336,6 @@ printBarcodes(items);
 
 
 
-
-
-// PRINT ALL
 
 
 function printAllBarcodes(){
@@ -2578,9 +2345,7 @@ function printAllBarcodes(){
 printBarcodes(products);
 
 
-
 }
-
 
 
 
@@ -2594,23 +2359,11 @@ function printBarcodes(items){
 
 
 let area =
-
-document.getElementById(
-"printArea"
-);
+document.getElementById("printArea");
 
 
 
 area.innerHTML="";
-
-
-
-let size =
-
-document.getElementById(
-"labelSize"
-).value;
-
 
 
 
@@ -2619,81 +2372,42 @@ items.forEach(p=>{
 
 
 
-let div =
+let amount =
+barcodeCopies[p.id] || 1;
 
+
+
+for(let i=0;i<amount;i++){
+
+
+
+let label =
 document.createElement("div");
 
 
 
-div.className =
-"print-label";
+label.className="print-label";
 
 
 
-
-if(size==="medium"){
-
-
-div.style.width="2.625in";
+label.innerHTML=`
 
 
-div.style.height="1in";
+<h3>${p.name}</h3>
 
 
-}
-
-
-
-if(size==="large"){
-
-
-div.style.width="3.33in";
-
-
-div.style.height="2in";
-
-
-}
-
-
-
-
-if(size==="full"){
-
-
-div.style.width="8.5in";
-
-
-div.style.height="11in";
-
-
-}
-
-
-
-
-
-div.innerHTML = `
-
-
-<h3>
-
-${p.name}
-
-</h3>
-
-
-<svg id="print-barcode-${p.id}"></svg>
+<svg id="print-${p.id}-${i}"></svg>
 
 
 `;
 
 
 
+area.appendChild(label);
 
-area.appendChild(div);
 
 
+}
 
 
 });
@@ -2704,16 +2418,22 @@ area.appendChild(div);
 
 
 
-
 items.forEach(p=>{
+
+
+let amount =
+barcodeCopies[p.id] || 1;
+
+
+
+for(let i=0;i<amount;i++){
 
 
 JsBarcode(
 
-"#print-barcode-"+p.id,
+"#print-"+p.id+"-"+i,
 
 p.barcode,
-
 
 {
 
@@ -2729,10 +2449,10 @@ displayValue:true
 
 }
 
-
-
 );
 
+
+}
 
 
 });
@@ -2741,10 +2461,7 @@ displayValue:true
 
 
 
-
-
 window.print();
-
 
 
 }
@@ -2762,16 +2479,11 @@ window.print();
 // ================================
 
 
-
 function displaySales(){
 
 
-
 let box =
-
-document.getElementById(
-"salesList"
-);
+document.getElementById("salesList");
 
 
 
@@ -2781,15 +2493,11 @@ return;
 
 
 
-
 box.innerHTML="";
 
 
 
-
-
 sales.forEach(s=>{
-
 
 
 box.innerHTML += `
@@ -2801,39 +2509,28 @@ box.innerHTML += `
 ${s.date}
 
 
-
 <br>
-
 
 
 ${s.payment}
 
 
-
 <br>
 
 
-
-${s.items
-
-.map(i=>i.name+" x"+i.qty)
-
-.join(", ")
-
-}
+${s.items.map(
+i=>i.name+" x"+i.qty
+).join(", ")}
 
 
 
 </div>
 
 
-
 `;
 
 
-
 });
-
 
 
 }
@@ -2847,17 +2544,13 @@ ${s.items
 function clearSales(){
 
 
-
 sales=[];
-
 
 
 saveData();
 
 
-
 displaySales();
-
 
 
 }
@@ -2878,29 +2571,22 @@ displaySales();
 window.onload=function(){
 
 
-
 updateCategoryDropdowns();
-
 
 
 displayCategoryButtons();
 
 
-
 displayProducts();
-
 
 
 displayInventory();
 
 
-
 displayBarcodeList();
 
 
-
 updateDashboard();
-
 
 
 updateCart();

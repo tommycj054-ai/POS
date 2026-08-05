@@ -3,18 +3,15 @@
 
 <head>
 
-<title>POS V11</title>
+<title>POS V12</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <link rel="stylesheet" href="style.css">
-
 
 <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
-
 
 </head>
 
@@ -34,8 +31,6 @@
 
 
 
-
-
 <!-- DASHBOARD -->
 
 <section id="dashboard" class="page active">
@@ -44,66 +39,34 @@
 <h2>Dashboard</h2>
 
 
-
 <div class="cards">
 
 
 <div class="card">
-
 <h3>Products</h3>
-
-<p id="productCount">
-0
-</p>
-
+<p id="productCount">0</p>
 </div>
 
 
-
-
 <div class="card">
-
 <h3>Stock</h3>
-
-<p id="inventoryCount">
-0
-</p>
-
+<p id="inventoryCount">0</p>
 </div>
 
 
-
-
-
 <div class="card">
-
 <h3>Low Stock</h3>
-
-<p id="lowStock">
-0
-</p>
-
+<p id="lowStock">0</p>
 </div>
-
-
-
 
 
 <div class="card">
-
 <h3>Sold</h3>
-
-<p id="itemsSold">
-0
-</p>
-
+<p id="itemsSold">0</p>
 </div>
 
 
-
 </div>
-
-
 
 
 
@@ -112,96 +75,59 @@
 
 
 <button onclick="showPage('addProduct')">
-
 ➕ Add Product
-
 </button>
-
 
 
 <button onclick="showPage('checkout')">
-
 🛒 Sale
-
 </button>
-
 
 
 <button onclick="showPage('inventory')">
-
 📦 Inventory
-
 </button>
-
-
 
 
 <button onclick="showPage('scanner')">
-
 📷 Scan
-
 </button>
 
 
-
 </div>
 
 
 
 
-
-
-
-
 <div class="dashboard-box">
-
 
 <h2>⚠️ Low Stock</h2>
 
-
 <div id="lowStockList"></div>
-
 
 </div>
 
 
 
 
-
-
-
 <div class="dashboard-box">
-
 
 <h2>⭐ Best Sellers</h2>
 
-
 <div id="bestSellers"></div>
 
-
 </div>
-
-
-
-
 
 
 
 
 <div class="dashboard-box">
 
-
 <h2>📦 Category Stock</h2>
-
 
 <div id="categoryStock"></div>
 
-
 </div>
-
-
-
-
 
 
 
@@ -215,17 +141,42 @@
 
 
 
-
-
-
-
 <!-- CHECKOUT -->
-
 
 <section id="checkout" class="page">
 
 
 <h2>Checkout</h2>
+
+
+<!-- V12 BLUETOOTH SCANNER INPUT -->
+
+<div class="scanner-box">
+
+<h3>🔎 Scan Product</h3>
+
+
+<input
+
+id="checkoutBarcodeInput"
+
+placeholder="Scan barcode here"
+
+autocomplete="off"
+
+onchange="checkoutBarcodeScan()"
+
+>
+
+
+<p>
+
+Connect Bluetooth scanner and scan item
+
+</p>
+
+
+</div>
 
 
 
@@ -234,28 +185,11 @@
 
 
 
-<input
-
-id="search"
-
-placeholder="Search products"
-
-oninput="searchProducts()"
-
->
-
-
-
-
 <div class="checkout-layout">
 
 
 
-
-
 <div id="products" class="product-grid"></div>
-
-
 
 
 
@@ -278,7 +212,6 @@ $
 <span id="total">
 0
 </span>
-
 
 </h2>
 
@@ -303,7 +236,6 @@ Clear
 
 
 
-
 <button class="black" onclick="pay('Card')">
 
 💳 Card
@@ -316,16 +248,11 @@ Clear
 
 
 
-
-
 </div>
 
 
 
 </section>
-
-
-
 
 
 
@@ -345,45 +272,23 @@ Clear
 
 
 
-
-
-<input
-
-id="productName"
-
-placeholder="Product Name"
-
->
+<input id="productName" placeholder="Product Name">
 
 
 
-
-
-<input
-
+<input 
 id="productPrice"
-
 type="number"
-
 placeholder="Price"
-
 >
-
-
 
 
 
 <input
-
 id="productStock"
-
 type="number"
-
 placeholder="Stock"
-
 >
-
-
 
 
 
@@ -393,16 +298,10 @@ placeholder="Stock"
 
 
 
-
-
 <input
-
 id="productBarcode"
-
 placeholder="Barcode"
-
 >
-
 
 
 
@@ -411,8 +310,6 @@ placeholder="Barcode"
 Generate Barcode
 
 </button>
-
-
 
 
 
@@ -429,8 +326,6 @@ accept="image/*"
 
 
 
-
-
 <button onclick="saveProduct()">
 
 Save Product
@@ -440,15 +335,6 @@ Save Product
 
 
 </section>
-
-
-
-
-
-
-
-
-
 <!-- EDIT PRODUCT -->
 
 
@@ -458,19 +344,21 @@ Save Product
 <h2>Edit Product</h2>
 
 
+<input id="editName" placeholder="Product Name">
 
 
-
-<input id="editName">
-
-
-
-<input id="editPrice" type="number">
-
+<input 
+id="editPrice" 
+type="number" 
+placeholder="Price"
+>
 
 
-<input id="editStock" type="number">
-
+<input 
+id="editStock" 
+type="number" 
+placeholder="Stock"
+>
 
 
 <select id="editCategory">
@@ -479,15 +367,11 @@ Save Product
 
 
 
-
-
 <button onclick="updateProduct()">
 
 Save Changes
 
 </button>
-
-
 
 
 </section>
@@ -506,7 +390,7 @@ Save Changes
 <section id="inventory" class="page">
 
 
-<h2>Inventory</h2>
+<h2>📦 Inventory</h2>
 
 
 
@@ -520,14 +404,17 @@ Save Changes
 
 
 
-<!-- BARCODE SCANNER -->
+
+
+
+
+<!-- SCANNER -->
 
 
 <section id="scanner" class="page">
 
 
 <h2>📷 Barcode Scanner</h2>
-
 
 
 
@@ -557,17 +444,12 @@ Remove -1 Stock
 </option>
 
 
-
 </select>
 
 
 
 
-
-
-<div id="cameraScanner">
-
-</div>
+<div id="cameraScanner"></div>
 
 
 
@@ -577,7 +459,6 @@ Remove -1 Stock
 Start Camera
 
 </button>
-
 
 
 
@@ -599,7 +480,6 @@ Bluetooth Scanner
 
 
 
-
 <input
 
 id="barcodeInput"
@@ -612,9 +492,7 @@ onchange="barcodeEntered()"
 
 
 
-
 <div id="scanResult"></div>
-
 
 
 
@@ -632,15 +510,13 @@ onchange="barcodeEntered()"
 
 
 
-<!-- BARCODE PRINTING -->
+<!-- BARCODE LABELS -->
 
 
 <section id="barcodes" class="page">
 
 
 <h2>🖨 Barcode Labels</h2>
-
-
 
 
 
@@ -653,6 +529,7 @@ onchange="barcodeEntered()"
 Label Size
 
 </label>
+
 
 
 
@@ -697,7 +574,6 @@ Full Page
 
 
 
-
 <button onclick="selectAllBarcodes()">
 
 ☑ Select All
@@ -717,13 +593,11 @@ Clear
 
 
 
-
 <button onclick="printSelectedBarcodes()">
 
 🖨 Print Selected
 
 </button>
-
 
 
 
@@ -746,24 +620,19 @@ Clear
 
 
 
-<div id="barcodeList">
 
-</div>
-
+<div id="barcodeList"></div>
 
 
 
 
 
-
-<div id="printArea">
-
-</div>
-
+<div id="printArea"></div>
 
 
 
 </section>
+
 
 
 
@@ -787,7 +656,6 @@ Clear
 
 
 
-
 <input
 
 id="categoryName"
@@ -795,8 +663,6 @@ id="categoryName"
 placeholder="New Category"
 
 >
-
-
 
 
 
@@ -810,12 +676,7 @@ Add Category
 
 
 
-
-<div id="categoryList">
-
-</div>
-
-
+<div id="categoryList"></div>
 
 
 
@@ -843,9 +704,7 @@ Add Category
 
 
 
-<div id="salesList">
-
-</div>
+<div id="salesList"></div>
 
 
 
@@ -867,12 +726,7 @@ Clear Sales
 
 
 
-
 </main>
-
-
-
-
 
 
 
@@ -888,7 +742,6 @@ Clear Sales
 <nav>
 
 
-
 <button onclick="showPage('dashboard')">
 
 ⌂
@@ -897,13 +750,11 @@ Clear Sales
 
 
 
-
 <button onclick="showPage('checkout')">
 
 🛒
 
 </button>
-
 
 
 
@@ -917,13 +768,11 @@ Clear Sales
 
 
 
-
 <button onclick="showPage('inventory')">
 
 📦
 
 </button>
-
 
 
 
@@ -937,13 +786,11 @@ Clear Sales
 
 
 
-
 <button onclick="showPage('categories')">
 
 ⚙️
 
 </button>
-
 
 
 
@@ -956,11 +803,7 @@ Clear Sales
 
 
 
-
 </nav>
-
-
-
 
 
 
@@ -973,6 +816,5 @@ Clear Sales
 
 
 </body>
-
 
 </html>
