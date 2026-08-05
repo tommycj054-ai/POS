@@ -1618,15 +1618,16 @@ input.value="";
 // ================================
 
 
-function findProductByBarcode(code){
+fufunction findProductByBarcode(code){
+
+code = String(code).trim();
 
 
-return products.find(
+return products.find(p =>
 
-p=>p.barcode===code
+String(p.barcode).trim() === code
 
 );
-
 
 }
 
@@ -1877,17 +1878,11 @@ decoder:{
 
 
 readers:[
-
-
 "code_128_reader",
-
+"code_39_reader",
 "ean_reader",
-
 "ean_8_reader",
-
 "upc_reader"
-
-
 ]
 
 
@@ -1929,8 +1924,11 @@ Quagga.onDetected(function(data){
 
 
 
-let code =
-data.codeResult.code;
+let code = data.codeResult.code.trim();
+
+console.log("CAMERA SCANNED:", code);
+
+processBarcodeScan(code);
 
 
 
