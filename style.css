@@ -1,84 +1,129 @@
+/* =========================
+   POS V12 STYLE
+========================= */
+
+
 * {
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+
+box-sizing:border-box;
+
+font-family:Arial, Helvetica, sans-serif;
+
 }
+
 
 
 body {
-    margin:0;
-    background:#f5f5f5;
-    color:#111;
+
+margin:0;
+
+background:#f5f5f5;
+
+color:#111;
+
 }
+
+
 
 
 
 header {
-    height:65px;
-    background:white;
-    border-bottom:1px solid #ddd;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+height:65px;
+
+background:white;
+
+border-bottom:1px solid #ddd;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
 }
 
 
 
 header h1 {
-    margin:0;
-    font-size:32px;
+
+margin:0;
+
+font-size:32px;
+
 }
 
 
 
 
+
 main {
-    padding:20px;
-    padding-bottom:100px;
+
+padding:20px;
+
+padding-bottom:100px;
+
 }
 
 
 
 
 .page {
-    display:none;
+
+display:none;
+
 }
+
 
 
 .page.active {
-    display:block;
+
+display:block;
+
 }
 
 
 
 
 
-/* DASHBOARD */
+/* =========================
+DASHBOARD
+========================= */
 
 
 .cards {
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(160px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(160px,1fr));
 
-    gap:15px;
+gap:15px;
 
 }
+
 
 
 
 .card {
 
-    background:white;
+background:white;
 
-    border:1px solid #ddd;
+border:1px solid #ddd;
 
-    border-radius:20px;
+border-radius:20px;
 
-    padding:20px;
+padding:20px;
 
-    text-align:center;
+text-align:center;
+
+}
+
+
+
+.card h3 {
+
+margin:0;
 
 }
 
@@ -86,11 +131,12 @@ main {
 
 .card p {
 
-    font-size:38px;
+font-size:40px;
 
-    margin:10px;
+margin:10px;
 
 }
+
 
 
 
@@ -98,15 +144,30 @@ main {
 
 .dashboard-box {
 
-    background:white;
+background:white;
 
-    border:1px solid #ddd;
+border:1px solid #ddd;
 
-    border-radius:20px;
+border-radius:20px;
 
-    padding:20px;
+padding:20px;
 
-    margin-top:20px;
+margin-top:20px;
+
+}
+
+
+
+
+
+.quick-buttons {
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+
+gap:10px;
 
 }
 
@@ -115,38 +176,56 @@ main {
 
 
 
-/* BUTTONS */
+
+
+/* =========================
+BUTTONS
+========================= */
 
 
 button {
 
-    background:white;
+background:white;
 
-    color:#111;
+border:1px solid #111;
 
-    border:1px solid #111;
+color:#111;
 
-    border-radius:15px;
+border-radius:15px;
 
-    padding:15px 20px;
+padding:15px 20px;
 
-    margin:5px;
+font-size:18px;
 
-    font-size:16px;
+min-height:55px;
 
-    min-height:50px;
+margin:5px;
 
-    cursor:pointer;
+touch-action:manipulation;
+
+-webkit-tap-highlight-color:transparent;
+
+cursor:pointer;
 
 }
+
+
+
+
+button:active {
+
+transform:scale(.97);
+
+}
+
 
 
 
 button:hover {
 
-    background:#111;
+background:#111;
 
-    color:white;
+color:white;
 
 }
 
@@ -154,11 +233,11 @@ button:hover {
 
 .black {
 
-    background:#111;
+background:#111;
 
-    color:white;
+color:white;
 
-    width:100%;
+width:100%;
 
 }
 
@@ -167,44 +246,29 @@ button:hover {
 
 
 
-/* INPUTS */
+
+/* =========================
+INPUTS
+========================= */
 
 
 input,
 select {
 
-    width:100%;
 
-    padding:15px;
+width:100%;
 
-    border-radius:15px;
+padding:16px;
 
-    border:1px solid #ccc;
+font-size:18px;
 
-    background:white;
+border-radius:15px;
 
-    font-size:17px;
+border:1px solid #ccc;
 
-    margin-bottom:12px;
+background:white;
 
-}
-
-
-
-
-
-
-/* QUICK BUTTONS */
-
-
-.quick-buttons {
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(180px,1fr));
-
-    gap:10px;
+margin-bottom:12px;
 
 }
 
@@ -212,31 +276,22 @@ select {
 
 
 
-
-
-
-/* CHECKOUT */
+/* =========================
+CHECKOUT
+========================= */
 
 
 .scanner-box {
 
-    background:white;
+background:white;
 
-    border-radius:20px;
+border-radius:20px;
 
-    border:1px solid #ddd;
+border:1px solid #ddd;
 
-    padding:15px;
+padding:15px;
 
-    margin-bottom:15px;
-
-}
-
-
-
-.scanner-box h3 {
-
-    margin-top:0;
+margin-bottom:15px;
 
 }
 
@@ -244,42 +299,46 @@ select {
 
 .checkout-layout {
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:2fr 1fr;
+grid-template-columns:2fr 1fr;
 
-    gap:20px;
+gap:20px;
 
 }
+
 
 
 
 
 .product-grid {
 
-    display:grid;
+display:grid;
 
-    grid-template-columns:
-    repeat(auto-fill,minmax(160px,1fr));
+grid-template-columns:
 
-    gap:15px;
+repeat(auto-fill,minmax(160px,1fr));
+
+gap:15px;
 
 }
 
 
 
 
+
 .product {
 
-    background:white;
 
-    border:1px solid #ddd;
+background:white;
 
-    border-radius:20px;
+border:1px solid #ddd;
 
-    padding:15px;
+border-radius:20px;
 
-    text-align:center;
+padding:15px;
+
+text-align:center;
 
 }
 
@@ -287,13 +346,14 @@ select {
 
 .product img {
 
-    width:120px;
 
-    height:120px;
+width:120px;
 
-    object-fit:cover;
+height:120px;
 
-    border-radius:15px;
+object-fit:cover;
+
+border-radius:15px;
 
 }
 
@@ -304,13 +364,14 @@ select {
 
 .cart {
 
-    background:white;
 
-    border-radius:20px;
+background:white;
 
-    border:1px solid #ddd;
+border-radius:20px;
 
-    padding:20px;
+border:1px solid #ddd;
+
+padding:20px;
 
 }
 
@@ -318,38 +379,34 @@ select {
 
 .cart-item {
 
-    display:flex;
 
-    justify-content:space-between;
+border-bottom:1px solid #eee;
 
-    align-items:center;
+padding:12px;
 
-    border-bottom:1px solid #eee;
+display:flex;
 
-    padding:12px;
+justify-content:space-between;
+
+align-items:center;
 
 }
-
-
-
-
-
-
-
-/* INVENTORY */
+/* =========================
+INVENTORY
+========================= */
 
 
 .inventory-item {
 
-    background:white;
+background:white;
 
-    border-radius:20px;
+border:1px solid #ddd;
 
-    border:1px solid #ddd;
+border-radius:20px;
 
-    padding:20px;
+padding:20px;
 
-    margin:15px 0;
+margin:15px 0;
 
 }
 
@@ -357,13 +414,13 @@ select {
 
 .inventory-item img {
 
-    width:100px;
+width:100px;
 
-    height:100px;
+height:100px;
 
-    object-fit:cover;
+object-fit:cover;
 
-    border-radius:15px;
+border-radius:15px;
 
 }
 
@@ -372,52 +429,103 @@ select {
 
 
 
-
-
-/* CAMERA SCANNER */
+/* =========================
+CAMERA SCANNER
+========================= */
 
 
 #cameraScanner {
 
-    height:350px;
+height:350px;
 
-    max-width:600px;
+max-width:600px;
 
-    background:#111;
+background:#111;
 
-    border-radius:20px;
+border-radius:20px;
 
-    margin:20px auto;
+margin:20px auto;
 
-    overflow:hidden;
+overflow:hidden;
+
+position:relative;
 
 }
+
 
 
 
 #cameraScanner video {
 
-    width:100%;
+width:100%;
 
-    height:100%;
+height:100%;
 
-    object-fit:cover;
+object-fit:cover;
 
 }
 
+
+
+#cameraScanner:after {
+
+
+content:"Place barcode here";
+
+
+position:absolute;
+
+
+top:50%;
+
+
+left:50%;
+
+
+transform:translate(-50%,-50%);
+
+
+
+border:3px solid white;
+
+
+border-radius:15px;
+
+
+padding:35px;
+
+
+color:white;
+
+
+font-size:20px;
+
+
+pointer-events:none;
+
+
+}
 
 
 
 
 #scanResult {
 
-    background:white;
 
-    padding:20px;
+background:white;
 
-    border-radius:20px;
 
-    margin-top:15px;
+border-radius:20px;
+
+
+padding:20px;
+
+
+margin-top:15px;
+
+
+font-size:20px;
+
 
 }
 
@@ -428,36 +536,47 @@ select {
 
 
 
-
-/* BARCODE PAGE */
+/* =========================
+BARCODE PAGE
+========================= */
 
 
 .barcode-controls {
 
-    background:white;
 
-    border-radius:20px;
+background:white;
 
-    border:1px solid #ddd;
 
-    padding:20px;
+border:1px solid #ddd;
 
-    margin-bottom:20px;
+
+border-radius:20px;
+
+
+padding:20px;
+
+
+margin-bottom:20px;
+
 
 }
-
 
 
 
 
 #barcodeList {
 
-    display:grid;
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(220px,1fr));
+display:grid;
 
-    gap:15px;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+
+gap:15px;
+
 
 }
 
@@ -467,49 +586,34 @@ select {
 
 .barcode-card {
 
-    background:white;
 
-    border-radius:15px;
+background:white;
 
-    border:1px solid #ddd;
 
-    padding:15px;
+border:1px solid #ddd;
 
-    text-align:center;
+
+border-radius:20px;
+
+
+padding:15px;
+
+
+text-align:center;
+
 
 }
-
 
 
 
 .barcode-card svg {
 
-    width:200px;
 
-    max-width:100%;
-
-}
+width:200px;
 
 
+max-width:100%;
 
-
-
-.barcode-quantity {
-
-    display:flex;
-
-    gap:10px;
-
-    align-items:center;
-
-}
-
-
-
-
-.barcode-quantity input {
-
-    text-align:center;
 
 }
 
@@ -518,13 +622,33 @@ select {
 
 
 
+.barcode-card input[type="number"] {
 
-/* PRINT */
+
+width:100px;
+
+
+text-align:center;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+PRINT AREA
+========================= */
 
 
 #printArea {
 
-    display:none;
+
+display:none;
+
 
 }
 
@@ -532,17 +656,24 @@ select {
 
 .print-label {
 
-    background:white;
 
-    width:2in;
+background:white;
 
-    height:1in;
 
-    padding:5px;
+width:2in;
 
-    text-align:center;
 
-    page-break-inside:avoid;
+height:1in;
+
+
+padding:5px;
+
+
+text-align:center;
+
+
+page-break-inside:avoid;
+
 
 }
 
@@ -550,20 +681,24 @@ select {
 
 .print-label h3 {
 
-    font-size:12px;
 
-    margin:0;
-
-}
+font-size:12px;
 
 
+margin:0;
 
-.print-label canvas {
-
-    width:90%;
 
 }
 
+
+
+.print-label svg {
+
+
+width:90%;
+
+
+}
 
 
 
@@ -574,9 +709,12 @@ select {
 @media print {
 
 
+
 body * {
 
-    visibility:hidden;
+
+visibility:hidden;
+
 
 }
 
@@ -585,7 +723,9 @@ body * {
 #printArea,
 #printArea * {
 
-    visibility:visible;
+
+visibility:visible;
+
 
 }
 
@@ -593,17 +733,24 @@ body * {
 
 #printArea {
 
-    display:grid;
 
-    grid-template-columns:repeat(3,2in);
+display:grid;
 
-    gap:.1in;
 
-    position:absolute;
+grid-template-columns:repeat(3,2in);
 
-    top:0;
 
-    left:0;
+gap:.1in;
+
+
+position:absolute;
+
+
+top:0;
+
+
+left:0;
+
 
 }
 
@@ -619,24 +766,37 @@ body * {
 
 
 
-/* CATEGORIES */
+/* =========================
+CATEGORIES
+========================= */
 
 
 .category-card {
 
-    background:white;
 
-    border-radius:15px;
+background:white;
 
-    padding:15px;
 
-    margin:10px 0;
+border:1px solid #ddd;
 
-    display:flex;
 
-    justify-content:space-between;
+border-radius:15px;
 
-    align-items:center;
+
+padding:15px;
+
+
+margin:10px 0;
+
+
+display:flex;
+
+
+justify-content:space-between;
+
+
+align-items:center;
+
 
 }
 
@@ -647,30 +807,86 @@ body * {
 
 
 
-/* NAVIGATION */
+
+/* =========================
+SALES
+========================= */
+
+
+.sales-item {
+
+
+background:white;
+
+
+border:1px solid #ddd;
+
+
+border-radius:15px;
+
+
+padding:15px;
+
+
+margin:10px 0;
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+BOTTOM NAV
+========================= */
 
 
 nav {
 
-    position:fixed;
 
-    bottom:0;
+position:fixed;
 
-    left:0;
 
-    right:0;
+bottom:0;
 
-    height:75px;
 
-    background:white;
+left:0;
 
-    border-top:1px solid #ddd;
 
-    display:flex;
+right:0;
 
-    justify-content:space-around;
 
-    align-items:center;
+
+height:75px;
+
+
+
+background:white;
+
+
+
+border-top:1px solid #ddd;
+
+
+
+display:flex;
+
+
+
+justify-content:space-around;
+
+
+
+align-items:center;
+
+
+
+z-index:9999;
+
 
 }
 
@@ -678,11 +894,18 @@ nav {
 
 nav button {
 
-    border:none;
 
-    background:white;
+border:none;
 
-    font-size:24px;
+
+background:white;
+
+
+font-size:26px;
+
+
+min-height:50px;
+
 
 }
 
@@ -693,15 +916,21 @@ nav button {
 
 
 
-/* IPAD / MOBILE */
+
+/* =========================
+IPAD / MOBILE
+========================= */
 
 
 @media(max-width:900px){
 
 
+
 .checkout-layout {
 
-    grid-template-columns:1fr;
+
+grid-template-columns:1fr;
+
 
 }
 
@@ -709,36 +938,65 @@ nav button {
 
 .product-grid {
 
-    grid-template-columns:repeat(2,1fr);
+
+grid-template-columns:repeat(2,1fr);
+
 
 }
+
 
 
 
 button {
 
-    font-size:18px;
 
-    min-height:55px;
+font-size:19px;
+
+
+min-height:60px;
+
 
 }
 
 
-}
-button {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    cursor: pointer;
-}
 
-.page {
-    touch-action: manipulation;
-}
 main {
-    padding-bottom:120px;
+
+
+padding-bottom:120px;
+
+
 }
 
 
-nav {
-    z-index:9999;
+
+}
+
+
+
+
+@media(max-width:500px){
+
+
+
+.product-grid {
+
+
+grid-template-columns:1fr;
+
+
+}
+
+
+
+.cards {
+
+
+grid-template-columns:1fr 1fr;
+
+
+}
+
+
+
 }

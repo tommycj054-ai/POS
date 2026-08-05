@@ -1,288 +1,169 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>POS V12</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 </head>
 
-
 <body>
-
 
 <header>
 
-<h1>POS</h1>
+<h1>POS V12</h1>
 
 </header>
 
-
-
 <main>
 
-
-
+<!-- ========================= -->
 <!-- DASHBOARD -->
+<!-- ========================= -->
 
 <section id="dashboard" class="page active">
 
-
 <h2>Dashboard</h2>
 
-
 <div class="cards">
-
 
 <div class="card">
 <h3>Products</h3>
 <p id="productCount">0</p>
 </div>
 
-
 <div class="card">
-<h3>Stock</h3>
+<h3>Inventory</h3>
 <p id="inventoryCount">0</p>
 </div>
-
 
 <div class="card">
 <h3>Low Stock</h3>
 <p id="lowStock">0</p>
 </div>
 
-
 <div class="card">
-<h3>Sold</h3>
+<h3>Items Sold</h3>
 <p id="itemsSold">0</p>
 </div>
 
-
 </div>
-
-
-
 
 <div class="quick-buttons">
 
-
-<button onclick="showPage('addProduct')">
-➕ Add Product
-</button>
-
-
 <button onclick="showPage('checkout')">
-🛒 Sale
+🛒 Checkout
 </button>
-
 
 <button onclick="showPage('inventory')">
 📦 Inventory
 </button>
 
-
-<button onclick="showPage('scanner')">
-📷 Scan
+<button onclick="showPage('addProduct')">
+➕ Add Product
 </button>
 
+<button onclick="showPage('scanner')">
+📷 Scanner
+</button>
 
 </div>
 
-
-
-
 <div class="dashboard-box">
 
-<h2>⚠️ Low Stock</h2>
+<h2>Low Stock</h2>
 
 <div id="lowStockList"></div>
 
 </div>
 
-
-
-
 <div class="dashboard-box">
 
-<h2>⭐ Best Sellers</h2>
+<h2>Best Sellers</h2>
 
 <div id="bestSellers"></div>
 
 </div>
 
-
-
-
-<div class="dashboard-box">
-
-<h2>📦 Category Stock</h2>
-
-<div id="categoryStock"></div>
-
-</div>
-
-
-
 </section>
 
-
-
-
-
-
-
-
-
+<!-- ========================= -->
 <!-- CHECKOUT -->
+<!-- ========================= -->
 
 <section id="checkout" class="page">
 
-
 <h2>Checkout</h2>
-
-
-<!-- V12 BLUETOOTH SCANNER INPUT -->
 
 <div class="scanner-box">
 
-<h3>🔎 Scan Product</h3>
-
+<h3>Bluetooth Barcode Scanner</h3>
 
 <input
-
 id="checkoutBarcodeInput"
-
-placeholder="Scan barcode here"
-
+placeholder="Scan barcode..."
 autocomplete="off"
-
-onchange="checkoutBarcodeScan()"
-
 >
 
-
-<p>
-
-Connect Bluetooth scanner and scan item
-
-</p>
-
-
 </div>
-
-
 
 <div id="categoryButtons"></div>
 
-
-
-
 <div class="checkout-layout">
-
-
 
 <div id="products" class="product-grid"></div>
 
-
-
-
-
 <div class="cart">
-
 
 <h2>Cart</h2>
 
-
 <div id="cartItems"></div>
 
-
-
-<h2>
-
-$
-
-<span id="total">
-0
-</span>
-
-</h2>
-
-
-
+<h2>$<span id="total">0.00</span></h2>
 
 <button onclick="clearCart()">
-
-Clear
-
+Clear Cart
 </button>
-
-
-
 
 <button class="black" onclick="pay('Cash')">
-
 💵 Cash
-
 </button>
-
-
-
 
 <button class="black" onclick="pay('Card')">
-
 💳 Card
-
 </button>
 
-
-
 </div>
 
-
-
 </div>
-
-
 
 </section>
 
-
-
-
-
-
-
-
-
+<!-- ========================= -->
 <!-- ADD PRODUCT -->
-
+<!-- ========================= -->
 
 <section id="addProduct" class="page">
 
-
 <h2>Add Product</h2>
 
+<input
+id="productName"
+placeholder="Product Name"
+>
 
-
-<input id="productName" placeholder="Product Name">
-
-
-
-<input 
+<input
 id="productPrice"
 type="number"
 placeholder="Price"
 >
-
-
 
 <input
 id="productStock"
@@ -290,73 +171,54 @@ type="number"
 placeholder="Stock"
 >
 
-
-
 <select id="productCategory">
-
 </select>
-
-
 
 <input
 id="productBarcode"
 placeholder="Barcode"
 >
 
-
-
 <button onclick="generateProductBarcode()">
-
 Generate Barcode
-
 </button>
-
-
-
 
 <input
-
 id="productImage"
-
 type="file"
-
 accept="image/*"
-
 >
 
-
-
 <button onclick="saveProduct()">
-
 Save Product
-
 </button>
 
-
-
 </section>
+<!-- ========================= -->
 <!-- EDIT PRODUCT -->
-
+<!-- ========================= -->
 
 <section id="editProduct" class="page">
-
 
 <h2>Edit Product</h2>
 
 
-<input id="editName" placeholder="Product Name">
+<input
+id="editName"
+placeholder="Product Name"
+>
 
 
-<input 
-id="editPrice" 
-type="number" 
+<input
+id="editPrice"
+type="number"
 placeholder="Price"
 >
 
 
-<input 
-id="editStock" 
-type="number" 
+<input
+id="editStock"
+type="number"
 placeholder="Stock"
 >
 
@@ -381,10 +243,9 @@ Save Changes
 
 
 
-
-
-
+<!-- ========================= -->
 <!-- INVENTORY -->
+<!-- ========================= -->
 
 
 <section id="inventory" class="page">
@@ -393,9 +254,7 @@ Save Changes
 <h2>📦 Inventory</h2>
 
 
-
 <div id="inventoryList"></div>
-
 
 
 </section>
@@ -406,9 +265,9 @@ Save Changes
 
 
 
-
-
-<!-- SCANNER -->
+<!-- ========================= -->
+<!-- BARCODE SCANNER -->
+<!-- ========================= -->
 
 
 <section id="scanner" class="page">
@@ -448,7 +307,6 @@ Remove -1 Stock
 
 
 
-
 <div id="cameraScanner"></div>
 
 
@@ -471,12 +329,7 @@ Stop Camera
 
 
 
-
-<h3>
-
-Bluetooth Scanner
-
-</h3>
+<h3>Bluetooth Scanner</h3>
 
 
 
@@ -484,9 +337,9 @@ Bluetooth Scanner
 
 id="barcodeInput"
 
-placeholder="Scan barcode here"
+placeholder="Scan barcode"
 
-onchange="barcodeEntered()"
+autocomplete="off"
 
 >
 
@@ -505,12 +358,9 @@ onchange="barcodeEntered()"
 
 
 
-
-
-
-
-
-<!-- BARCODE LABELS -->
+<!-- ========================= -->
+<!-- BARCODE PRINTING -->
+<!-- ========================= -->
 
 
 <section id="barcodes" class="page">
@@ -521,15 +371,6 @@ onchange="barcodeEntered()"
 
 
 <div class="barcode-controls">
-
-
-
-<label>
-
-Label Size
-
-</label>
-
 
 
 
@@ -573,7 +414,6 @@ Full Page
 
 
 
-
 <button onclick="selectAllBarcodes()">
 
 ☑ Select All
@@ -595,17 +435,16 @@ Clear
 
 <button onclick="printSelectedBarcodes()">
 
-🖨 Print Selected
+Print Selected
 
 </button>
 
 
 
 
-
 <button onclick="printAllBarcodes()">
 
-🖨 Print All
+Print All
 
 </button>
 
@@ -616,15 +455,7 @@ Clear
 
 
 
-
-
-
-
-
 <div id="barcodeList"></div>
-
-
-
 
 
 <div id="printArea"></div>
@@ -640,19 +471,15 @@ Clear
 
 
 
-
-
-
-
-
+<!-- ========================= -->
 <!-- CATEGORIES -->
+<!-- ========================= -->
 
 
 <section id="categories" class="page">
 
 
 <h2>⚙️ Categories</h2>
-
 
 
 
@@ -666,13 +493,12 @@ placeholder="New Category"
 
 
 
+
 <button onclick="addCategory()">
 
 Add Category
 
 </button>
-
-
 
 
 
@@ -689,12 +515,9 @@ Add Category
 
 
 
-
-
-
-
-
-<!-- SALES -->
+<!-- ========================= -->
+<!-- SALES HISTORY -->
+<!-- ========================= -->
 
 
 <section id="sales" class="page">
@@ -724,8 +547,6 @@ Clear Sales
 
 
 
-
-
 </main>
 
 
@@ -735,8 +556,9 @@ Clear Sales
 
 
 
-
+<!-- ========================= -->
 <!-- NAVIGATION -->
+<!-- ========================= -->
 
 
 <nav>
@@ -809,10 +631,7 @@ Clear Sales
 
 
 
-
-
 <script src="app.js"></script>
-
 
 
 </body>
