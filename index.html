@@ -77,7 +77,15 @@
 <section id="barcodes" class="page">
 <h2>🖨 Barcode Labels</h2>
 <div class="barcode-controls">
-<select id="labelSize"><option value="small">2 x 1 inch</option><option value="medium">2.625 x 1 inch</option><option value="large">3.33 x 2 inch</option><option value="full">Full Page</option></select>
+<select id="labelSize">
+<option value="tiny">Tiny — 1.25 × 0.75 inch</option>
+<option value="extraSmall">Extra Small — 1.5 × 0.75 inch</option>
+<option value="small" selected>Small — 2 × 1 inch</option>
+<option value="medium">Medium — 2.625 × 1 inch</option>
+<option value="large">Large — 3.33 × 2 inch</option>
+<option value="full">Full Page</option>
+</select>
+<p class="print-help">Maximum 21 barcode labels per printed page. Extra spacing is added to help prevent labels from getting cut off.</p>
 <button id="selectAllBarcodes">☑ Select All</button><button id="clearBarcodeSelection">Clear</button><button id="printSelected">Print Selected</button><button id="printAll">Print All</button>
 </div>
 <div id="barcodeList"></div><div id="printArea"></div>
